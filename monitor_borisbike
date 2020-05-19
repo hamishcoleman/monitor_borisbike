@@ -113,6 +113,8 @@ sub main {
     my @ids;
     if (scalar(@ARGV)) {
         @ids = @ARGV;
+    } elsif (defined($ENV{'BORIS_IDS'})) {
+        @ids = split(/ /,$ENV{'BORIS_IDS'});
     } else {
         die("Need id list");
     }
