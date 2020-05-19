@@ -80,6 +80,13 @@ sub main {
 
     my $db = {};
 
+    my $cmd;
+    if ($ARGV[0] !~ m/\d+/) {
+        $cmd = shift @ARGV;
+    } else {
+        $cmd = "show";
+    }
+
     my @ids;
     if (scalar(@ARGV)) {
         @ids = @ARGV;
@@ -96,12 +103,18 @@ sub main {
         print(Dumper($db));
     }
 
-    my @fields;
-    push @fields, time();
-    for my $id (@ARGV) {
-        push @fields, $db->{data}{$id};
+    if ($cmd eq 'config') {
+        ...;
     }
-    print(join(" ",@fields),"\n");
+
+    if ($cmd eq 'show') {
+        my @fields;
+        push @fields, time();
+        for my $id (@ids) {
+            push @fields, $db->{data}{$id};
+        }
+        print(join(" ",@fields),"\n");
+    }
 }
 unless(caller) {
     main();
