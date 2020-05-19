@@ -58,14 +58,41 @@ sub get_BikePoint {
     return $result;
 }
 
+sub extract_data {
+    my $json = shift;
+
+    # currently, the only data we are interested in is the Number of Bikes
+
+    for my $prop (@{$json->{additionalProperties}}) {
+        next if ($prop->{category} ne "Description");
+        next if ($prop->{sourceSystemKey} ne "BikePoints");
+        next if ($prop->{key} ne "NbBikes");
+        return $prop->{value};
+    }
+    return undef;
+}
+
 sub main {
     my $option = argparser();
 
     my $ua = LWP::UserAgent->new();
 
+    my $db = {};
     for my $id (@ARGV) {
-        print(Dumper(get_BikePoint($ua, $id)));
+        $db->{json}{$id} = get_BikePoint($ua, $id);
+        $db->{data}{$id} = extract_data($db->{json}{$id});
     }
+
+    if ($option->{debug}) {
+        print(Dumper($db));
+    }
+
+    my @fields;
+    push @fields, time();
+    for my $id (@ARGV) {
+        push @fields, $db->{data}{$id};
+    }
+    print(join(" ",@fields),"\n");
 }
 unless(caller) {
     main();
