@@ -107,7 +107,7 @@ sub main {
     if (defined($ARGV[0]) && $ARGV[0] !~ m/\d+/) {
         $cmd = shift @ARGV;
     } else {
-        $cmd = "show";
+        $cmd = "fetch";
     }
 
     my @ids;
