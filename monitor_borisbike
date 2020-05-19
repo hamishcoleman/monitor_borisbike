@@ -82,9 +82,17 @@ sub render_config {
     print("graph_category physical\n");
     print("graph_info This graph shows the number of boris bikes available at a number of locations\n");
     for my $json (values(%{$db->{json}})) {
-        my $id = $json->{id};
-        my $name = $json->{commonName};
-        print($id.".label ".$name."\n");
+        my $field = $json->{id};
+        my $label = $json->{commonName};
+        print($field.".label ".$label."\n");
+    }
+}
+
+sub render_fetch {
+    my $db = shift;
+    while (my ($id, $json) = each(%{$db->{json}})) {
+        my $field = $json->{id};
+        print($field.".value ".$db->{data}{$id}."\n");
     }
 }
 
@@ -120,6 +128,11 @@ sub main {
 
     if ($cmd eq 'config') {
         render_config($db);
+        return;
+    }
+
+    if ($cmd eq 'fetch') {
+        render_fetch($db);
         return;
     }
 
