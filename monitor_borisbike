@@ -73,6 +73,21 @@ sub extract_data {
     return undef;
 }
 
+sub render_config {
+    my $db = shift;
+
+    print("graph_title Boris Bikes available\n");
+    print("graph_vlabel Bikes\n");
+    print("graph_args --base 1000 --lower-limit 0\n");
+    print("graph_category physical\n");
+    print("graph_info This graph shows the number of boris bikes available at a number of locations\n");
+    for my $json (values(%{$db->{json}})) {
+        my $id = $json->{id};
+        my $name = $json->{commonName};
+        print($id.".label ".$name."\n");
+    }
+}
+
 sub main {
     my $option = argparser();
 
@@ -104,7 +119,8 @@ sub main {
     }
 
     if ($cmd eq 'config') {
-        ...;
+        render_config($db);
+        return;
     }
 
     if ($cmd eq 'show') {
