@@ -81,7 +81,9 @@ sub render_config {
     print("graph_args --base 1000 --lower-limit 0\n");
     print("graph_category physical\n");
     print("graph_info This graph shows the number of boris bikes available at a number of locations\n");
-    for my $json (values(%{$db->{json}})) {
+    my @IDS = sort(keys(%{$db->{json}}));
+    for my $id (@IDS) {
+        my $json = $db->{json}{$id};
         my $field = $json->{id};
         my $label = $json->{commonName};
         print($field.".label ".$label."\n");
