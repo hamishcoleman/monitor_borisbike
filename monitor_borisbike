@@ -1,0 +1,73 @@
+#!/usr/bin/env perl
+use warnings;
+use strict;
+#
+# Given a list of boris bike location ID, fetch the current available bikes
+# at each location
+#
+
+use LWP::UserAgent;
+use Getopt::Long 2.33 qw(:config gnu_getopt no_auto_abbrev);
+use Pod::Usage;
+use JSON;
+use IO::File;
+
+use Data::Dumper;
+$Data::Dumper::Indent = 1;
+$Data::Dumper::Sortkeys = 1;
+$Data::Dumper::Quotekeys = 0;
+
+sub argparser {
+    my $option = {
+    };
+    my @option_list = (
+        "app_id=s",
+        "app_key=s",
+        "debug",
+    );
+
+    GetOptions($option,@option_list,'man','help|?') or pod2usage(2);
+    if ($option->{help} && @option_list) {
+        print("List of options:\n");
+        print("\t");
+        print join(",", @option_list);
+        print("\n");
+        exit(0);
+    }
+    pod2usage(-exitstatus => 0, -verbose => 2) if $option->{man};
+
+    return $option;
+}
+
+sub get_BikePoint {
+    my $ua = shift;
+    my $id = shift;
+
+    my $url = "https://api-tigris.tfl.gov.uk/Place/BikePoints_" . $id;
+    # TODO:
+    # - app_id, app_key
+    
+    my $req = HTTP::Request->new(GET => $url);
+    my $res = $ua->request($req);
+
+    if (!$res->is_success()) {
+        die("Error fetching $url");
+    }
+
+    my $result = decode_json($res->content());
+    return $result;
+}
+
+sub main {
+    my $option = argparser();
+
+    my $ua = LWP::UserAgent->new();
+
+    for my $id (@ARGV) {
+        print(Dumper(get_BikePoint($ua, $id)));
+    }
+}
+unless(caller) {
+    main();
+}
+
