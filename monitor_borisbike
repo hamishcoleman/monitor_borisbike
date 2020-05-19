@@ -60,13 +60,14 @@ sub get_BikePoint {
 
 sub extract_data {
     my $json = shift;
+    my $field = shift;
 
     # currently, the only data we are interested in is the Number of Bikes
 
     for my $prop (@{$json->{additionalProperties}}) {
         next if ($prop->{category} ne "Description");
         next if ($prop->{sourceSystemKey} ne "BikePoints");
-        next if ($prop->{key} ne "NbBikes");
+        next if ($prop->{key} ne $field);
         return $prop->{value};
     }
     return undef;
@@ -80,7 +81,7 @@ sub main {
     my $db = {};
     for my $id (@ARGV) {
         $db->{json}{$id} = get_BikePoint($ua, $id);
-        $db->{data}{$id} = extract_data($db->{json}{$id});
+        $db->{data}{$id} = extract_data($db->{json}{$id}, "NbBikes");
     }
 
     if ($option->{debug}) {
