@@ -43,7 +43,7 @@ sub get_BikePoint {
     my $ua = shift;
     my $id = shift;
 
-    my $url = "https://api-tigris.tfl.gov.uk/Place/BikePoints_" . $id;
+    my $url = "https://api.tfl.gov.uk/Place/BikePoints_" . $id;
     # TODO:
     # - app_id, app_key
     

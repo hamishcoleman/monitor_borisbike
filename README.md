@@ -32,8 +32,8 @@ and restart munin-node.
 
 resources:
 - https://tfl.gov.uk/tfl/syndication/feeds/cycle-hire/livecyclehireupdates.xml
-- https://api-tigris.tfl.gov.uk/BikePoint/BikePoints_448
-- https://api-tigris.tfl.gov.uk/swagger/ui/index.html#!/BikePoint/BikePoint_Get
+- https://api.tfl.gov.uk/BikePoint/BikePoints_448
+- https://api.tfl.gov.uk/swagger/ui/index.html#!/BikePoint/BikePoint_Get
 - https://data.london.gov.uk/dataset/number-bicycle-hires
 
 projects:
